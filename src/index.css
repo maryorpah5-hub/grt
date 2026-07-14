@@ -1,0 +1,91 @@
+@import "tailwindcss";
+
+@theme {
+  --color-navy-950: #060d1a;
+  --color-navy-900: #0d1629;
+  --color-navy-800: #1c2b4a;
+  --color-navy-700: #253660;
+  --color-navy-600: #2e4278;
+  --color-orange-400: #FBBF24;
+  --color-orange-500: #D4AF37;
+  --color-orange-600: #B8860B;
+  --color-teal-400: #4F63C2;
+  --color-teal-500: #3B4B96;
+  --color-teal-600: #2C3977;
+  --font-outfit: "Outfit", sans-serif;
+  --font-inter: "Inter", sans-serif;
+}
+
+@layer base {
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--font-inter);
+    background-color: #ffffff;
+    color: #1a1f36;
+    overflow-x: hidden;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-outfit);
+    font-weight: 700;
+    line-height: 1.15;
+  }
+}
+
+@layer utilities {
+  .font-outfit { font-family: var(--font-outfit); }
+  .font-inter  { font-family: var(--font-inter);  }
+}
+
+/* Fade-in animation */
+.fade-in {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.65s ease, transform 0.65s ease;
+}
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Scroll wheel hint */
+@keyframes scrollBounce {
+  0%, 100% { transform: translateY(0); opacity: 1; }
+  50% { transform: translateY(6px); opacity: 0.4; }
+}
+
+/* Hero orb animations */
+@keyframes orbFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -20px) scale(1.05); }
+  66% { transform: translate(-20px, 15px) scale(0.97); }
+}
+
+/* Progress bar fill */
+@keyframes fillBar {
+  from { width: 0; }
+  to { width: 67%; }
+}
+
+/* Pulse dot */
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.3); }
+}
+
+/* Live dot */
+@keyframes livePulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0,196,180,0.6); }
+  50% { box-shadow: 0 0 0 6px rgba(0,196,180,0); }
+}
+
+/* Float badge hover */
+.float-badge { animation: badgeFloat 3s ease-in-out infinite; }
+.float-badge.fb-bottom { animation-delay: 1.5s; }
+@keyframes badgeFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+/* Count up */
+@keyframes countUp { from { opacity:0; } to { opacity:1; } }
