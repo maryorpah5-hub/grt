@@ -3,8 +3,8 @@
   "outputDirectory": "dist",
   "framework": "vite",
   "rewrites": [
-    { "source": "/admin", "destination": "/index.html" },
-    { "source": "/admin/dashboard", "destination": "/index.html" },
+    { "source": "/secure-admin", "destination": "/index.html" },
+    { "source": "/secure-admin/dashboard", "destination": "/index.html" },
     { "source": "/((?!api/).*)", "destination": "/index.html" }
   ]
 }

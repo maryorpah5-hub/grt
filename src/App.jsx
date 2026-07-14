@@ -9,9 +9,9 @@ export default function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/admin" element={<AdminLogin />} />
+        <Route path="/secure-admin" element={<AdminLogin />} />
         <Route 
-          path="/admin/dashboard" 
+          path="/secure-admin/dashboard" 
           element={
             <ProtectedRoute>
               <AdminDashboard />

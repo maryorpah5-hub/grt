@@ -30,7 +30,7 @@ export default function AdminDashboard() {
   };
 
   useEffect(() => {
-    if (!token) return navigate('/admin');
+    if (!token) return navigate('/secure-admin');
     
     const loadData = async () => {
       setLoading(true);
@@ -42,7 +42,7 @@ export default function AdminDashboard() {
 
   const handleLogout = () => {
     localStorage.removeItem('adminToken');
-    navigate('/admin');
+    navigate('/secure-admin');
   };
 
   const handleInputChange = (e) => {
@@ -90,7 +90,7 @@ export default function AdminDashboard() {
   };
 
   const deleteTracking = async (id) => {
-    if (!confirm('Are you sure you want to delete this record?')) return;
+    if (!confirm('Are you sure you want to securely delete this record?')) return;
     await fetch(`/api/admin/tracking/${id}`, {
       method: 'DELETE',
       headers: { Authorization: `Bearer ${token}` }
@@ -98,133 +98,162 @@ export default function AdminDashboard() {
     fetchTracking();
   };
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center bg-[#f7f9fc]">Loading...</div>;
+  if (loading) return (
+    <div className="min-h-screen flex items-center justify-center bg-[#060d1a]">
+      <div className="animate-spin h-10 w-10 border-4 border-[#3B4B96] border-t-[#D4AF37] rounded-full"></div>
+    </div>
+  );
 
   return (
-    <div className="min-h-screen bg-[#f7f9fc] font-inter">
-      {/* Navbar */}
-      <nav className="bg-white shadow-sm px-4 md:px-8 h-20 flex items-center justify-between sticky top-0 z-10 border-b border-gray-100">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-[#3B4B96] rounded-xl flex items-center justify-center text-white font-bold shadow-md">S</div>
-          <span className="font-outfit text-[#3B4B96] text-xl font-bold hidden sm:inline">Admin <span className="text-[#D4AF37]">Portal</span></span>
+    <div className="min-h-screen bg-[#060d1a] font-inter text-gray-200 relative overflow-hidden selection:bg-[#D4AF37] selection:text-[#0d1629]">
+      {/* Dynamic Background */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#3B4B96]/10 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#D4AF37]/5 rounded-full blur-[120px] pointer-events-none" />
+
+      {/* Glassmorphic Navbar */}
+      <nav className="relative z-20 bg-white/5 backdrop-blur-xl border-b border-white/10 px-6 md:px-10 h-20 flex items-center justify-between sticky top-0 shadow-2xl">
+        <div className="flex items-center gap-4">
+          <div className="w-10 h-10 bg-gradient-to-tr from-[#3B4B96] to-[#4F62B8] rounded-xl flex items-center justify-center text-white font-bold shadow-lg shadow-blue-900/30 ring-1 ring-white/20">S</div>
+          <span className="font-outfit text-white text-xl font-bold tracking-wide hidden sm:inline">
+            SecureLine <span className="text-[#D4AF37] font-light">Command Center</span>
+          </span>
         </div>
-        <button onClick={handleLogout} className="text-red-500 font-semibold hover:bg-red-50 px-4 py-2 rounded-lg transition-colors text-sm md:text-base">
-          Logout
+        <button onClick={handleLogout} className="text-red-400 font-semibold hover:text-red-300 hover:bg-red-500/10 px-5 py-2.5 rounded-xl transition-all duration-300 text-sm md:text-base border border-transparent hover:border-red-500/20">
+          Sign Out Access
         </button>
       </nav>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 md:py-10">
-        {/* Tabs */}
-        <div className="flex flex-wrap gap-2 md:gap-4 mb-6 md:mb-8">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 py-8 md:py-12">
+        {/* Navigation Tabs */}
+        <div className="flex flex-wrap gap-3 md:gap-4 mb-8 md:mb-10">
           <button 
             onClick={() => setActiveTab('messages')}
-            className={`px-4 md:px-6 py-2 md:py-3 rounded-xl font-semibold text-sm transition-all ${activeTab === 'messages' ? 'bg-[#3B4B96] text-white shadow-md' : 'bg-white text-gray-500 hover:bg-gray-50 border border-gray-200'}`}>
-            Messages ({messages.length})
+            className={`px-6 py-3 rounded-2xl font-bold text-sm tracking-wide transition-all duration-300 ${activeTab === 'messages' ? 'bg-[#3B4B96] text-white shadow-lg shadow-blue-900/30 ring-1 ring-white/20 scale-[1.02]' : 'bg-white/5 text-gray-400 hover:bg-white/10 border border-white/10'}`}>
+            Communication Intel ({messages.length})
           </button>
           <button 
             onClick={() => setActiveTab('tracking')}
-            className={`px-4 md:px-6 py-2 md:py-3 rounded-xl font-semibold text-sm transition-all ${activeTab === 'tracking' ? 'bg-[#D4AF37] text-white shadow-md' : 'bg-white text-gray-500 hover:bg-gray-50 border border-gray-200'}`}>
-            Tracking ({tracking.length})
+            className={`px-6 py-3 rounded-2xl font-bold text-sm tracking-wide transition-all duration-300 ${activeTab === 'tracking' ? 'bg-[#D4AF37] text-[#060d1a] shadow-lg shadow-orange-500/20 ring-1 ring-[#D4AF37]/50 scale-[1.02]' : 'bg-white/5 text-gray-400 hover:bg-white/10 border border-white/10'}`}>
+            Active Logistics ({tracking.length})
           </button>
         </div>
 
-        {/* Content */}
-        {activeTab === 'messages' && (
-          <div className="bg-white rounded-2xl md:rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-            <div className="p-4 md:p-6 border-b border-gray-100"><h2 className="font-outfit font-bold text-lg md:text-xl text-[#0d1629]">Recent Inquiries</h2></div>
-            <div className="divide-y divide-gray-100">
-              {messages.length === 0 ? <p className="p-6 text-gray-500 text-center">No messages yet.</p> : null}
-              {messages.map(msg => (
-                <div key={msg.id} className="p-4 md:p-6 hover:bg-gray-50 transition-colors">
-                  <div className="flex flex-col sm:flex-row justify-between items-start mb-2 gap-2">
-                    <div>
-                      <h3 className="font-bold text-[#0d1629] text-base md:text-lg">{msg.name}</h3>
-                      <div className="text-xs md:text-sm text-gray-500 flex flex-wrap gap-x-4 gap-y-1 mt-1">
-                        <span>📞 {msg.phone}</span>
-                        {msg.email && <span>✉️ {msg.email}</span>}
-                        {msg.service && <span>🏷️ {msg.service}</span>}
+        {/* Content Area */}
+        <div className="animate-[fadeIn_0.4s_ease-out]">
+          {activeTab === 'messages' && (
+            <div className="bg-white/5 backdrop-blur-xl rounded-3xl border border-white/10 overflow-hidden shadow-2xl">
+              <div className="p-6 md:p-8 border-b border-white/10 bg-white/[0.02]"><h2 className="font-outfit font-bold text-xl md:text-2xl text-white">Encrypted Inquiries</h2></div>
+              <div className="divide-y divide-white/5">
+                {messages.length === 0 ? <p className="p-10 text-gray-500 text-center font-medium">No active communications found.</p> : null}
+                {messages.map(msg => (
+                  <div key={msg.id} className="p-6 md:p-8 hover:bg-white/5 transition-colors duration-300">
+                    <div className="flex flex-col sm:flex-row justify-between items-start mb-3 gap-2">
+                      <div>
+                        <h3 className="font-bold text-white text-lg md:text-xl tracking-wide">{msg.name}</h3>
+                        <div className="text-sm text-gray-400 flex flex-wrap gap-x-5 gap-y-2 mt-2">
+                          <span className="flex items-center gap-1.5"><span className="text-[#D4AF37]">📞</span> {msg.phone}</span>
+                          {msg.email && <span className="flex items-center gap-1.5"><span className="text-[#3B4B96]">✉️</span> {msg.email}</span>}
+                          {msg.service && <span className="flex items-center gap-1.5 bg-white/5 px-2.5 py-0.5 rounded-md border border-white/10 text-xs text-[#D4AF37]">{msg.service}</span>}
+                        </div>
                       </div>
+                      <span className="text-xs text-gray-500 font-semibold shrink-0 bg-black/40 px-3 py-1.5 rounded-lg border border-white/5">{new Date(msg.createdAt).toLocaleString()}</span>
                     </div>
-                    <span className="text-[10px] md:text-xs text-gray-400 font-semibold shrink-0">{new Date(msg.createdAt).toLocaleString()}</span>
+                    <p className="mt-5 text-gray-300 bg-black/30 p-5 rounded-2xl text-sm border border-white/5 leading-relaxed">{msg.message}</p>
                   </div>
-                  <p className="mt-3 md:mt-4 text-gray-700 bg-gray-50 p-3 md:p-4 rounded-xl text-sm border border-gray-100">{msg.message}</p>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {activeTab === 'tracking' && (
-          <div className="space-y-6 md:space-y-8">
-            {/* Create/Edit form */}
-            <div className="bg-white rounded-2xl md:rounded-3xl shadow-sm border border-gray-100 p-4 md:p-8">
-              <div className="flex justify-between items-center mb-4 md:mb-6">
-                <h2 className="font-outfit font-bold text-lg md:text-xl text-[#0d1629]">
-                  {editingId ? 'Edit Tracking Record' : 'Create Tracking Record'}
-                </h2>
-                {editingId && (
-                  <button type="button" onClick={cancelEdit} className="text-gray-500 hover:text-gray-700 text-sm font-semibold">
-                    Cancel Edit
+          {activeTab === 'tracking' && (
+            <div className="space-y-8 md:space-y-10">
+              
+              {/* Form Section */}
+              <div className="bg-white/5 backdrop-blur-xl rounded-3xl border border-white/10 p-6 md:p-10 shadow-2xl relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-[#D4AF37]/5 rounded-full blur-2xl" />
+                
+                <div className="flex justify-between items-center mb-8 relative z-10">
+                  <h2 className="font-outfit font-bold text-xl md:text-2xl text-white">
+                    {editingId ? 'Modify Secure Record' : 'Initialize Shipment'}
+                  </h2>
+                  {editingId && (
+                    <button type="button" onClick={cancelEdit} className="text-gray-400 hover:text-white text-sm font-bold bg-white/5 px-4 py-2 rounded-xl transition-colors border border-white/10">
+                      Abort Modification
+                    </button>
+                  )}
+                </div>
+                
+                <form onSubmit={saveTracking} className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5 relative z-10">
+                  {[
+                    {name: 'trackingNumber', placeholder: 'ID (e.g. SLD-123)'},
+                    {name: 'status', placeholder: 'Current Status'},
+                    {name: 'origin', placeholder: 'Origin Location'},
+                    {name: 'destination', placeholder: 'Destination'},
+                    {name: 'eta', placeholder: 'Est. Arrival'},
+                  ].map(f => (
+                    <input key={f.name} name={f.name} value={formData[f.name]} onChange={handleInputChange} placeholder={f.placeholder} required className="bg-black/30 border border-white/10 focus:border-[#D4AF37] focus:bg-black/50 rounded-xl px-5 py-3.5 text-white outline-none transition-all duration-300 placeholder:text-gray-600 text-sm font-medium w-full" />
+                  ))}
+                  <input name="progress" type="number" min="0" max="100" value={formData.progress} onChange={handleInputChange} placeholder="Completion % (0-100)" required className="bg-black/30 border border-white/10 focus:border-[#D4AF37] focus:bg-black/50 rounded-xl px-5 py-3.5 text-white outline-none transition-all duration-300 placeholder:text-gray-600 text-sm font-medium w-full" />
+                  
+                  <button type="submit" className="sm:col-span-2 bg-gradient-to-r from-[#D4AF37] to-[#FBBF24] hover:from-[#FBBF24] hover:to-[#FCD34D] text-[#060d1a] font-bold py-4 rounded-xl transition-all duration-300 shadow-xl shadow-orange-500/10 mt-2 text-sm tracking-wide">
+                    {editingId ? 'Finalize Modification' : 'Deploy Record'}
                   </button>
+                </form>
+              </div>
+
+              {/* Grid Layout for Records */}
+              <div>
+                <div className="flex items-center gap-4 mb-6 px-2">
+                  <h2 className="font-outfit font-bold text-xl md:text-2xl text-white">Active Grid</h2>
+                  <div className="flex-1 h-px bg-white/10" />
+                </div>
+                
+                {tracking.length === 0 ? (
+                  <div className="bg-white/5 backdrop-blur-xl rounded-3xl border border-white/10 p-10 text-center text-gray-500 font-medium">
+                    No authorized shipments in the grid.
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                    {tracking.map(t => (
+                      <div key={t.id} className="bg-white/5 backdrop-blur-md rounded-3xl border border-white/10 p-5 md:p-6 flex flex-col gap-4 hover:border-white/20 hover:bg-white/10 transition-all duration-300 group shadow-lg">
+                        
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <div className="font-bold text-[#D4AF37] text-xl tracking-tight mb-1">{t.trackingNumber}</div>
+                            <div className="text-xs font-bold uppercase tracking-widest text-[#3B4B96] bg-[#3B4B96]/10 inline-block px-3 py-1 rounded-md border border-[#3B4B96]/20">{t.status}</div>
+                          </div>
+                          <div className="flex gap-2 opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <button onClick={() => handleEdit(t)} className="text-white hover:text-[#D4AF37] font-semibold text-xs bg-black/40 px-4 py-2 rounded-lg border border-white/10 hover:border-[#D4AF37]/50 transition-colors">Modify</button>
+                            <button onClick={() => deleteTracking(t.id)} className="text-red-400 hover:text-red-300 font-semibold text-xs bg-red-500/10 px-4 py-2 rounded-lg border border-red-500/20 hover:border-red-500/50 transition-colors">Terminate</button>
+                          </div>
+                        </div>
+
+                        <div className="text-sm text-gray-400 bg-black/30 rounded-2xl p-4 border border-white/5 mt-1">
+                          <div className="flex justify-between items-center mb-2.5">
+                            <span className="font-semibold text-gray-500 uppercase tracking-wider text-[10px]">Vector</span>
+                            <span className="font-medium text-white">{t.origin} <span className="text-[#3B4B96] mx-1">→</span> {t.destination}</span>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <span className="font-semibold text-gray-500 uppercase tracking-wider text-[10px]">Projected ETA</span>
+                            <span className="font-medium text-white bg-white/5 px-2 py-0.5 rounded border border-white/5">{t.eta}</span>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-4 mt-2 bg-black/20 p-3 rounded-2xl border border-white/5">
+                          <div className="flex-1 h-2 bg-black/50 rounded-full overflow-hidden border border-white/5 relative">
+                            <div className="absolute top-0 left-0 h-full bg-gradient-to-r from-[#3B4B96] to-[#D4AF37] rounded-full transition-all duration-1000 shadow-[0_0_10px_rgba(212,175,55,0.5)]" style={{width: `${t.progress}%`}}/>
+                          </div>
+                          <span className="text-xs font-bold text-white w-10 text-right tabular-nums">{t.progress}%</span>
+                        </div>
+                        
+                      </div>
+                    ))}
+                  </div>
                 )}
               </div>
-              <form onSubmit={saveTracking} className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
-                <input name="trackingNumber" value={formData.trackingNumber} onChange={handleInputChange} placeholder="Tracking Number (e.g. SLD-123)" required className="border-2 border-gray-200 rounded-xl px-3 md:px-4 py-2.5 md:py-3 outline-none focus:border-[#D4AF37] text-sm md:text-base w-full" />
-                <input name="status" value={formData.status} onChange={handleInputChange} placeholder="Status (e.g. In Transit)" required className="border-2 border-gray-200 rounded-xl px-3 md:px-4 py-2.5 md:py-3 outline-none focus:border-[#D4AF37] text-sm md:text-base w-full" />
-                <input name="origin" value={formData.origin} onChange={handleInputChange} placeholder="Origin" required className="border-2 border-gray-200 rounded-xl px-3 md:px-4 py-2.5 md:py-3 outline-none focus:border-[#D4AF37] text-sm md:text-base w-full" />
-                <input name="destination" value={formData.destination} onChange={handleInputChange} placeholder="Destination" required className="border-2 border-gray-200 rounded-xl px-3 md:px-4 py-2.5 md:py-3 outline-none focus:border-[#D4AF37] text-sm md:text-base w-full" />
-                <input name="eta" value={formData.eta} onChange={handleInputChange} placeholder="ETA (e.g. Oct 24, 2024)" required className="border-2 border-gray-200 rounded-xl px-3 md:px-4 py-2.5 md:py-3 outline-none focus:border-[#D4AF37] text-sm md:text-base w-full" />
-                <input name="progress" type="number" min="0" max="100" value={formData.progress} onChange={handleInputChange} placeholder="Progress % (0-100)" required className="border-2 border-gray-200 rounded-xl px-3 md:px-4 py-2.5 md:py-3 outline-none focus:border-[#D4AF37] text-sm md:text-base w-full" />
-                <button type="submit" className="sm:col-span-2 bg-[#D4AF37] hover:bg-[#FBBF24] text-white font-bold py-3 md:py-4 rounded-xl transition-colors shadow-lg shadow-orange-500/20 mt-2 text-sm md:text-base w-full">
-                  {editingId ? 'Update Record' : 'Add Record'}
-                </button>
-              </form>
             </div>
-
-            {/* List - Card layout for mobile first */}
-            <div>
-              <h2 className="font-outfit font-bold text-lg md:text-xl text-[#0d1629] mb-4 px-2">Active Shipments</h2>
-              {tracking.length === 0 ? (
-                <div className="bg-white rounded-2xl md:rounded-3xl shadow-sm border border-gray-100 p-6 text-center text-gray-500">
-                  No active shipments.
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                  {tracking.map(t => (
-                    <div key={t.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-5 flex flex-col gap-3 hover:border-gray-300 transition-colors">
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <div className="font-bold text-[#3B4B96] text-lg">{t.trackingNumber}</div>
-                          <div className="text-sm text-gray-700 font-semibold">{t.status}</div>
-                        </div>
-                        <div className="flex gap-2">
-                          <button onClick={() => handleEdit(t)} className="text-[#D4AF37] hover:text-[#B8860B] font-semibold text-sm bg-orange-50 px-3 py-1.5 rounded-lg">Edit</button>
-                          <button onClick={() => deleteTracking(t.id)} className="text-red-500 hover:text-red-700 font-semibold text-sm bg-red-50 px-3 py-1.5 rounded-lg">Delete</button>
-                        </div>
-                      </div>
-                      <div className="text-sm text-gray-500 bg-gray-50 rounded-xl p-3 border border-gray-100">
-                        <div className="flex justify-between mb-1">
-                          <span className="font-medium text-gray-700">Route:</span>
-                          <span>{t.origin} → {t.destination}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="font-medium text-gray-700">ETA:</span>
-                          <span>{t.eta}</span>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-3 mt-1">
-                        <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
-                          <div className="h-full bg-[#D4AF37]" style={{width: `${t.progress}%`}}/>
-                        </div>
-                        <span className="text-xs font-bold text-gray-500 w-8">{t.progress}%</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );

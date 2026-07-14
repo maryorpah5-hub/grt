@@ -10,8 +10,8 @@ const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
-  const username = 'admin';
-  const password = 'password123';
+  const username = 'secure_administrator';
+  const password = 'SecureAdmin2026!';
   const passwordHash = await bcrypt.hash(password, 10);
 
   const existingAdmin = await prisma.admin.findUnique({ where: { username } });
