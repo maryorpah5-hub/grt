@@ -76,7 +76,7 @@ export default function TrackSection() {
                   value={tracking}
                   onChange={e => setTracking(e.target.value)}
                   onKeyDown={e => e.key === 'Enter' && handleTrack()}
-                  placeholder="e.g. SLD-2024-88421"
+                  placeholder="e.g. SLD-US-7742193"
                   className="flex-1 border-2 border-gray-200 focus:border-[#D4AF37] rounded-xl px-4 py-3 text-[#0d1629] outline-none transition-colors text-sm font-medium"
                 />
                 <button
@@ -86,7 +86,7 @@ export default function TrackSection() {
                   {loading ? '...' : 'Track Now'}
                 </button>
               </div>
-              <p className="text-[#9ca3af] text-xs mb-6">Formats: SLD-2024-88421 · 12345 · SL-88421</p>
+              <p className="text-[#9ca3af] text-xs mb-6">Formats: SLD-US-7742193 · SLUS884219 · SLD-2025-00142</p>
 
               {result && (
                 <div className="border-2 border-[#3B4B96]/30 bg-[#3B4B96]/5 rounded-2xl p-5 animate-[fadeIn_0.4s_ease]">

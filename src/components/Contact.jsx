@@ -120,7 +120,7 @@ export default function Contact() {
               <h3 className="font-outfit font-bold text-white text-lg mb-4">Contact Info</h3>
               <ul className="space-y-3">
                 {[
-                  ['📍','14 Harbour Drive, Lagos, Nigeria'],
+                  ['📍','1140 6th Ave, New York, NY 10036, USA'],
                   ['📞','+1 300 400 5000'],
                   ['✉️','hello@securelinedelivery.com'],
                   ['🕐','Mon–Fri, 8am – 8pm'],

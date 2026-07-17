@@ -33,19 +33,21 @@ export default function Hero() {
               Enter The Consignment No.
             </h1>
             
-            <div className="flex flex-col sm:flex-row mb-4 shadow-sm border border-gray-200 bg-white">
+            <form 
+              onSubmit={(e) => { e.preventDefault(); document.getElementById('track')?.scrollIntoView({ behavior: 'smooth' }); }}
+              className="flex flex-col sm:flex-row mb-4 shadow-sm border border-gray-200 bg-white">
               <input 
                 type="text" 
                 placeholder="Enter Tracking Number"
                 className="flex-grow px-5 py-4 focus:outline-none focus:border-[#3B4B96] focus:ring-1 focus:ring-[#3B4B96] text-gray-700 bg-transparent text-[15px]"
               />
-              <button className="bg-[#3B4B96] hover:bg-[#2c3977] text-white px-8 py-4 font-semibold transition-colors duration-200 whitespace-nowrap text-sm tracking-wide">
+              <button type="submit" className="bg-[#3B4B96] hover:bg-[#2c3977] text-white px-8 py-4 font-semibold transition-colors duration-200 whitespace-nowrap text-sm tracking-wide">
                 TRACK RESULT
               </button>
-            </div>
+            </form>
             
             <p className="text-[#333333] font-medium text-[17px]">
-              Ex: 12345
+              Ex: SLD-US-7742193
             </p>
           </div>
 

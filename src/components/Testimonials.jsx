@@ -4,7 +4,7 @@ export default function Testimonials() {
   const reviews = [
     {
       quote: 'I use Secureline Delivery and I totally love their professional customer service. They are the best and I will recommend them — they never disappoint.',
-      name: 'Joeby Ragpa', role: 'COO, Hyatt Global', initials: 'JR',
+      name: 'Jonathan Reynolds', role: 'COO, Hyatt Global', initials: 'JR',
       color: 'from-[#D4AF37] to-[#FBBF24]',
     },
     {
@@ -14,7 +14,7 @@ export default function Testimonials() {
     },
     {
       quote: 'Secureline transformed our supply chain. Real-time tracking and customs clearance support saved us weeks of stress and thousands in potential delay costs.',
-      name: 'Marcus Kelechi', role: 'Head of Operations, TradeLink Co.', initials: 'MK',
+      name: 'Marcus Knight', role: 'Head of Operations, TradeLink Co.', initials: 'MK',
       color: 'from-[#3B4B96] to-[#2C3977]',
     },
   ]
