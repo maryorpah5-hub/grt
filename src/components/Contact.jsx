@@ -59,7 +59,7 @@ export default function Contact() {
                 <div>
                   <label className="block text-white/70 text-xs font-semibold uppercase tracking-wider mb-2">Phone *</label>
                   <input name="phone" value={form.phone} onChange={handleChange} required
-                    placeholder="+1 300 400 5000" className={inputCls} />
+                    placeholder="+1 978 325 1772" className={inputCls} />
                 </div>
               </div>
               <div>
@@ -121,7 +121,7 @@ export default function Contact() {
               <ul className="space-y-3">
                 {[
                   ['📍','1140 6th Ave, New York, NY 10036, USA'],
-                  ['📞','+1 300 400 5000'],
+                  ['📞','+1 978 325 1772'],
                   ['✉️','hello@securelinedelivery.com'],
                   ['🕐','Mon–Fri, 8am – 8pm'],
                 ].map(([icon, text]) => (
