@@ -35,7 +35,7 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center font-inter relative overflow-hidden">
+    <div className="min-h-screen px-6 flex items-center justify-center font-inter relative overflow-hidden">
       {/* Background with overlay */}
       <div 
         className="absolute inset-0 bg-cover bg-center"
@@ -48,7 +48,7 @@ export default function AdminLogin() {
       <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#D4AF37]/10 rounded-full blur-[100px] pointer-events-none" />
 
       {/* Login Card */}
-      <div className="relative w-full max-w-[420px] p-8 md:p-10 mx-6 bg-white/5 backdrop-blur-md border border-white/10 rounded-3xl shadow-2xl shadow-black/50 z-10">
+      <div className="relative w-full max-w-[420px] p-8 md:p-10 bg-white/5 backdrop-blur-md border border-white/10 rounded-3xl shadow-2xl shadow-black/50 z-10">
         <div className="text-center mb-8">
           <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-[#3B4B96] to-[#4F62B8] mx-auto flex items-center justify-center text-white text-2xl font-bold mb-6 shadow-lg shadow-blue-900/30 ring-1 ring-white/20">S</div>
           <h1 className="font-outfit text-2xl md:text-3xl font-bold text-white mb-2 tracking-tight">Secure Portal</h1>

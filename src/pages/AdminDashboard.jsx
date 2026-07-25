@@ -119,7 +119,7 @@ export default function AdminDashboard() {
           </span>
         </div>
         <button onClick={handleLogout} className="text-red-400 font-semibold hover:text-red-300 hover:bg-red-500/10 px-5 py-2.5 rounded-xl transition-all duration-300 text-sm md:text-base border border-transparent hover:border-red-500/20">
-          Sign Out Access
+          Sign Out <span className="hidden sm:inline">Access</span>
         </button>
       </nav>
 
@@ -217,7 +217,7 @@ export default function AdminDashboard() {
                     {tracking.map(t => (
                       <div key={t.id} className="bg-white/5 backdrop-blur-md rounded-3xl border border-white/10 p-5 md:p-6 flex flex-col gap-4 hover:border-white/20 hover:bg-white/10 transition-all duration-300 group shadow-lg">
                         
-                        <div className="flex justify-between items-start">
+                        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3">
                           <div>
                             <div className="font-bold text-[#D4AF37] text-xl tracking-tight mb-1">{t.trackingNumber}</div>
                             <div className="text-xs font-bold uppercase tracking-widest text-[#3B4B96] bg-[#3B4B96]/10 inline-block px-3 py-1 rounded-md border border-[#3B4B96]/20">{t.status}</div>
