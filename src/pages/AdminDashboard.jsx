@@ -11,7 +11,33 @@ export default function AdminDashboard() {
     trackingNumber: '', status: '', origin: '', destination: '', eta: '', progress: ''
   });
   const [editingId, setEditingId] = useState(null);
+  
+  const [eventData, setEventData] = useState({ status: '', location: '', timestamp: '' });
 
+  const handleEventInputChange = (e) => {
+    setEventData({ ...eventData, [e.target.name]: e.target.value });
+  };
+
+  const saveEvent = async (e) => {
+    e.preventDefault();
+    if (!editingId) return;
+    await fetch('/api/admin/tracking-events', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ ...eventData, trackingRecordId: editingId })
+    });
+    setEventData({ status: '', location: '', timestamp: '' });
+    fetchTracking();
+  };
+
+  const deleteEvent = async (id) => {
+    if (!confirm('Delete this event?')) return;
+    await fetch(`/api/admin/tracking-events/${id}`, {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    fetchTracking();
+  };
   const navigate = useNavigate();
   const token = localStorage.getItem('adminToken');
 
@@ -199,6 +225,36 @@ export default function AdminDashboard() {
                     {editingId ? 'Finalize Modification' : 'Deploy Record'}
                   </button>
                 </form>
+
+                {editingId && (
+                  <div className="mt-10 pt-8 border-t border-white/10 relative z-10">
+                    <h3 className="font-outfit font-bold text-lg text-white mb-6">Timeline Events</h3>
+                    
+                    <form onSubmit={saveEvent} className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+                      <input name="status" value={eventData.status} onChange={handleEventInputChange} placeholder="Event Status (e.g. In Transit)" required className="bg-black/30 border border-white/10 focus:border-[#D4AF37] rounded-xl px-4 py-3 text-white text-sm" />
+                      <input name="location" value={eventData.location} onChange={handleEventInputChange} placeholder="Location" required className="bg-black/30 border border-white/10 focus:border-[#D4AF37] rounded-xl px-4 py-3 text-white text-sm" />
+                      <div className="flex gap-2">
+                        <input name="timestamp" type="datetime-local" value={eventData.timestamp} onChange={handleEventInputChange} required className="bg-black/30 border border-white/10 focus:border-[#D4AF37] rounded-xl px-4 py-3 text-white text-sm w-full [color-scheme:dark]" />
+                        <button type="submit" className="bg-[#3B4B96] hover:bg-[#4F62B8] text-white px-4 rounded-xl font-bold transition-colors shadow-lg">Add</button>
+                      </div>
+                    </form>
+
+                    <div className="space-y-3">
+                      {tracking.find(t => t.id === editingId)?.events?.map(ev => (
+                        <div key={ev.id} className="flex justify-between items-center bg-black/20 p-4 rounded-xl border border-white/5">
+                          <div>
+                            <div className="font-bold text-white text-sm">{ev.status}</div>
+                            <div className="text-xs text-gray-400">{ev.location} &bull; {new Date(ev.timestamp).toLocaleString()}</div>
+                          </div>
+                          <button onClick={() => deleteEvent(ev.id)} className="text-red-400 hover:text-red-300 text-xs font-bold px-3 py-1.5 bg-red-500/10 rounded-lg">Delete</button>
+                        </div>
+                      ))}
+                      {tracking.find(t => t.id === editingId)?.events?.length === 0 && (
+                        <div className="text-gray-500 text-sm text-center">No timeline events yet.</div>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Grid Layout for Records */}

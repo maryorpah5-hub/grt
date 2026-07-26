@@ -99,7 +99,7 @@ export default function TrackSection() {
                       {result.status}
                     </span>
                   </div>
-                  <div className="text-xs text-[#6b7280] mb-2 flex justify-between">
+                  <div className="text-xs text-[#6b7280] mb-2 flex justify-between mt-4">
                     <span>Delivery Progress</span>
                     <span className="font-semibold text-[#0d1629]">{result.progress}% · ETA {result.eta}</span>
                   </div>
@@ -108,6 +108,28 @@ export default function TrackSection() {
                       className="h-full bg-gradient-to-r from-[#D4AF37] to-[#3B4B96] rounded-full transition-all duration-1000"
                       style={{ width: `${result.progress}%` }}/>
                   </div>
+
+                  {result.events && result.events.length > 0 && (
+                    <div className="mt-6 pt-6 border-t border-gray-200">
+                      <h4 className="font-outfit font-bold text-[#0d1629] mb-4 text-lg">Tracking History</h4>
+                      <div className="relative border-l-2 border-gray-200 ml-3 space-y-6">
+                        {result.events.map((ev, i) => (
+                          <div key={ev.id} className="relative pl-6">
+                            <div className={`absolute -left-[9px] top-1 w-4 h-4 rounded-full border-4 border-white ${i === 0 ? 'bg-[#D4AF37]' : 'bg-[#3B4B96]'}`} />
+                            <div className={`font-bold text-sm ${i === 0 ? 'text-[#D4AF37]' : 'text-[#3B4B96]'}`}>
+                              {ev.status}
+                            </div>
+                            <div className="text-[#6b7280] text-xs mt-0.5">{ev.location}</div>
+                            <div className="text-[#9ca3af] text-[10px] uppercase tracking-wider font-semibold mt-1">
+                              {new Date(ev.timestamp).toLocaleString(undefined, {
+                                month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit'
+                              })}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
             </div>

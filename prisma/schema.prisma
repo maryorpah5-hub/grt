@@ -38,4 +38,15 @@ model TrackingRecord {
   eta             String
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
+  events          TrackingEvent[]
+}
+
+model TrackingEvent {
+  id               String         @id @default(uuid())
+  trackingRecordId String
+  record           TrackingRecord @relation(fields: [trackingRecordId], references: [id], onDelete: Cascade)
+  status           String
+  location         String
+  timestamp        DateTime
+  createdAt        DateTime       @default(now())
 }

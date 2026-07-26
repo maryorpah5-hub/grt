@@ -15,7 +15,12 @@ export default async function handler(req, res) {
   try {
     const prisma = getPrisma();
     const record = await prisma.trackingRecord.findUnique({
-      where: { trackingNumber: number }
+      where: { trackingNumber: number },
+      include: {
+        events: {
+          orderBy: { timestamp: 'desc' }
+        }
+      }
     });
     if (!record) {
       return res.status(404).json({ error: 'Tracking number not found' });
