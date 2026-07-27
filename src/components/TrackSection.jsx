@@ -5,21 +5,23 @@ export default function TrackSection() {
   const [tracking, setTracking] = useState('')
   const [result, setResult] = useState(null)
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
 
   const handleTrack = async () => {
     if (!tracking.trim()) return
     setLoading(true)
     setResult(null)
+    setError(null)
     try {
       const res = await fetch(`/api/tracking/${encodeURIComponent(tracking.trim())}`)
       if (res.ok) {
         setResult(await res.json())
       } else {
-        alert('Tracking number not found.')
+        setError('Tracking number not found. Please check and try again.')
       }
     } catch (e) {
       console.error(e)
-      alert('Network error')
+      setError('Network error. Please check your connection and try again.')
     }
     setLoading(false)
   }
@@ -87,6 +89,13 @@ export default function TrackSection() {
                 </button>
               </div>
               <p className="text-[#9ca3af] text-xs mb-6">Formats: SLD-US-7742193 · SLUS884219 · SLD-2025-00142</p>
+
+              {error && (
+                <div className="mb-6 p-4 rounded-xl bg-red-50/80 border border-red-100 flex items-start gap-3 animate-[fadeIn_0.3s_ease]">
+                  <span className="w-5 h-5 rounded-full bg-red-100 text-red-600 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">!</span>
+                  <p className="text-red-700 text-sm font-medium">{error}</p>
+                </div>
+              )}
 
               {result && (
                 <div className="border-2 border-[#3B4B96]/30 bg-[#3B4B96]/5 rounded-2xl p-5 animate-[fadeIn_0.4s_ease]">
