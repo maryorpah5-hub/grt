@@ -76,6 +76,6 @@ export default async function handler(req, res) {
     return res.status(201).json(record);
   } catch (error) {
     console.error('Auto-generate error:', error);
-    return res.status(500).json({ error: 'Server error during generation', details: error.message, stack: error.stack });
+    return res.status(500).json({ error: 'Server error during generation' });
   }
 }
