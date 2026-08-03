@@ -39,6 +39,9 @@ export default async function handler(req, res) {
   if (req.method === 'POST') {
     try {
       const data = { ...req.body, progress: parseInt(req.body.progress || '0', 10) };
+      if (!data.trackingNumber) {
+        data.trackingNumber = `SLD-US-${Math.floor(1000000 + Math.random() * 9000000)}`;
+      }
       const record = await prisma.trackingRecord.create({ data });
       return res.status(201).json(record);
     } catch (error) {
