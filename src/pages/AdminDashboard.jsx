@@ -162,16 +162,15 @@ export default function AdminDashboard() {
       </nav>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 py-8 md:py-12">
-        {/* Navigation Tabs */}
-        <div className="flex flex-wrap gap-3 md:gap-4 mb-8 md:mb-10">
+        <div className="flex flex-col sm:flex-row gap-3 md:gap-4 mb-6 md:mb-10">
           <button 
             onClick={() => setActiveTab('messages')}
-            className={`px-6 py-3 rounded-2xl font-bold text-sm tracking-wide transition-all duration-300 ${activeTab === 'messages' ? 'bg-[#3B4B96] text-white shadow-lg shadow-blue-900/30 ring-1 ring-white/20 scale-[1.02]' : 'bg-white/5 text-gray-400 hover:bg-white/10 border border-white/10'}`}>
+            className={`w-full sm:w-auto px-6 py-3.5 sm:py-3 rounded-2xl font-bold text-sm tracking-wide transition-all duration-300 ${activeTab === 'messages' ? 'bg-[#3B4B96] text-white shadow-lg shadow-blue-900/30 ring-1 ring-white/20 scale-[1.02]' : 'bg-white/5 text-gray-400 hover:bg-white/10 border border-white/10'}`}>
             Communication Intel ({messages.length})
           </button>
           <button 
             onClick={() => setActiveTab('tracking')}
-            className={`px-6 py-3 rounded-2xl font-bold text-sm tracking-wide transition-all duration-300 ${activeTab === 'tracking' ? 'bg-[#D4AF37] text-[#060d1a] shadow-lg shadow-orange-500/20 ring-1 ring-[#D4AF37]/50 scale-[1.02]' : 'bg-white/5 text-gray-400 hover:bg-white/10 border border-white/10'}`}>
+            className={`w-full sm:w-auto px-6 py-3.5 sm:py-3 rounded-2xl font-bold text-sm tracking-wide transition-all duration-300 ${activeTab === 'tracking' ? 'bg-[#D4AF37] text-[#060d1a] shadow-lg shadow-orange-500/20 ring-1 ring-[#D4AF37]/50 scale-[1.02]' : 'bg-white/5 text-gray-400 hover:bg-white/10 border border-white/10'}`}>
             Active Logistics ({tracking.length})
           </button>
         </div>
@@ -180,11 +179,11 @@ export default function AdminDashboard() {
         <div className="animate-[fadeIn_0.4s_ease-out]">
           {activeTab === 'messages' && (
             <div className="bg-white/5 backdrop-blur-xl rounded-3xl border border-white/10 overflow-hidden shadow-2xl">
-              <div className="p-6 md:p-8 border-b border-white/10 bg-white/[0.02]"><h2 className="font-outfit font-bold text-xl md:text-2xl text-white">Encrypted Inquiries</h2></div>
+              <div className="p-5 md:p-8 border-b border-white/10 bg-white/[0.02]"><h2 className="font-outfit font-bold text-xl md:text-2xl text-white">Encrypted Inquiries</h2></div>
               <div className="divide-y divide-white/5">
                 {messages.length === 0 ? <p className="p-10 text-gray-500 text-center font-medium">No active communications found.</p> : null}
                 {messages.map(msg => (
-                  <div key={msg.id} className="p-6 md:p-8 hover:bg-white/5 transition-colors duration-300">
+                  <div key={msg.id} className="p-5 md:p-8 hover:bg-white/5 transition-colors duration-300">
                     <div className="flex flex-col sm:flex-row justify-between items-start mb-3 gap-2">
                       <div>
                         <h3 className="font-bold text-white text-lg md:text-xl tracking-wide">{msg.name}</h3>
@@ -207,21 +206,21 @@ export default function AdminDashboard() {
             <div className="space-y-8 md:space-y-10">
               
               {/* Form Section */}
-              <div className="bg-white/5 backdrop-blur-xl rounded-3xl border border-white/10 p-6 md:p-10 shadow-2xl relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-[#D4AF37]/5 rounded-full blur-2xl" />
+              <div className="bg-white/5 backdrop-blur-xl rounded-3xl border border-white/10 p-5 md:p-10 shadow-2xl relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-[#D4AF37]/5 rounded-full blur-2xl pointer-events-none" />
                 
-                <div className="flex justify-between items-center mb-8 relative z-10">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 md:mb-8 relative z-10">
                   <h2 className="font-outfit font-bold text-xl md:text-2xl text-white">
                     {editingId ? 'Modify Secure Record' : 'Initialize Shipment'}
                   </h2>
-                  <div className="flex gap-3">
+                  <div className="flex flex-wrap gap-3 w-full sm:w-auto">
                     {!editingId && (
-                      <button type="button" onClick={autoGenerateRecord} className="text-[#D4AF37] hover:text-[#FBBF24] text-sm font-bold bg-[#D4AF37]/10 hover:bg-[#D4AF37]/20 px-4 py-2 rounded-xl transition-colors border border-[#D4AF37]/30 shadow-lg shadow-orange-900/20">
+                      <button type="button" onClick={autoGenerateRecord} className="flex-1 sm:flex-none text-[#D4AF37] hover:text-[#FBBF24] text-sm font-bold bg-[#D4AF37]/10 hover:bg-[#D4AF37]/20 px-4 py-3 sm:py-2 rounded-xl transition-colors border border-[#D4AF37]/30 shadow-lg shadow-orange-900/20">
                         ⚡ Auto-Generate
                       </button>
                     )}
                     {editingId && (
-                      <button type="button" onClick={cancelEdit} className="text-gray-400 hover:text-white text-sm font-bold bg-white/5 px-4 py-2 rounded-xl transition-colors border border-white/10">
+                      <button type="button" onClick={cancelEdit} className="flex-1 sm:flex-none text-gray-400 hover:text-white text-sm font-bold bg-white/5 px-4 py-3 sm:py-2 rounded-xl transition-colors border border-white/10">
                         Abort Modification
                       </button>
                     )}
@@ -249,12 +248,12 @@ export default function AdminDashboard() {
                   <div className="mt-10 pt-8 border-t border-white/10 relative z-10">
                     <h3 className="font-outfit font-bold text-lg text-white mb-6">Timeline Events</h3>
                     
-                    <form onSubmit={saveEvent} className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-                      <input name="status" value={eventData.status} onChange={handleEventInputChange} placeholder="Event Status (e.g. In Transit)" required className="bg-black/30 border border-white/10 focus:border-[#D4AF37] rounded-xl px-4 py-3 text-white text-sm" />
-                      <input name="location" value={eventData.location} onChange={handleEventInputChange} placeholder="Location" required className="bg-black/30 border border-white/10 focus:border-[#D4AF37] rounded-xl px-4 py-3 text-white text-sm" />
-                      <div className="flex gap-2">
-                        <input name="timestamp" type="datetime-local" value={eventData.timestamp} onChange={handleEventInputChange} required className="bg-black/30 border border-white/10 focus:border-[#D4AF37] rounded-xl px-4 py-3 text-white text-sm w-full [color-scheme:dark]" />
-                        <button type="submit" className="bg-[#3B4B96] hover:bg-[#4F62B8] text-white px-4 rounded-xl font-bold transition-colors shadow-lg">Add</button>
+                    <form onSubmit={saveEvent} className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4 mb-8">
+                      <input name="status" value={eventData.status} onChange={handleEventInputChange} placeholder="Event Status (e.g. In Transit)" required className="bg-black/30 border border-white/10 focus:border-[#D4AF37] rounded-xl px-4 py-3.5 md:py-3 text-white text-sm" />
+                      <input name="location" value={eventData.location} onChange={handleEventInputChange} placeholder="Location" required className="bg-black/30 border border-white/10 focus:border-[#D4AF37] rounded-xl px-4 py-3.5 md:py-3 text-white text-sm" />
+                      <div className="flex flex-col sm:flex-row gap-2">
+                        <input name="timestamp" type="datetime-local" value={eventData.timestamp} onChange={handleEventInputChange} required className="bg-black/30 border border-white/10 focus:border-[#D4AF37] rounded-xl px-4 py-3.5 md:py-3 text-white text-sm w-full [color-scheme:dark]" />
+                        <button type="submit" className="bg-[#3B4B96] hover:bg-[#4F62B8] text-white px-5 py-3.5 md:py-3 rounded-xl font-bold transition-colors shadow-lg shrink-0">Add</button>
                       </div>
                     </form>
 
@@ -292,14 +291,14 @@ export default function AdminDashboard() {
                     {tracking.map(t => (
                       <div key={t.id} className="bg-white/5 backdrop-blur-md rounded-3xl border border-white/10 p-5 md:p-6 flex flex-col gap-4 hover:border-white/20 hover:bg-white/10 transition-all duration-300 group shadow-lg">
                         
-                        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3">
+                        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
                           <div>
-                            <div className="font-bold text-[#D4AF37] text-xl tracking-tight mb-1">{t.trackingNumber}</div>
-                            <div className="text-xs font-bold uppercase tracking-widest text-[#3B4B96] bg-[#3B4B96]/10 inline-block px-3 py-1 rounded-md border border-[#3B4B96]/20">{t.status}</div>
+                            <div className="font-bold text-[#D4AF37] text-xl tracking-tight mb-1.5">{t.trackingNumber}</div>
+                            <div className="text-xs font-bold uppercase tracking-widest text-[#3B4B96] bg-[#3B4B96]/10 inline-block px-3 py-1.5 rounded-md border border-[#3B4B96]/20">{t.status}</div>
                           </div>
-                          <div className="flex gap-2 opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <button onClick={() => handleEdit(t)} className="text-white hover:text-[#D4AF37] font-semibold text-xs bg-black/40 px-4 py-2 rounded-lg border border-white/10 hover:border-[#D4AF37]/50 transition-colors">Modify</button>
-                            <button onClick={() => deleteTracking(t.id)} className="text-red-400 hover:text-red-300 font-semibold text-xs bg-red-500/10 px-4 py-2 rounded-lg border border-red-500/20 hover:border-red-500/50 transition-colors">Terminate</button>
+                          <div className="flex flex-row gap-2 w-full sm:w-auto opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <button onClick={() => handleEdit(t)} className="flex-1 sm:flex-none text-white hover:text-[#D4AF37] font-semibold text-xs bg-black/40 px-4 py-3 sm:py-2 rounded-lg border border-white/10 hover:border-[#D4AF37]/50 transition-colors">Modify</button>
+                            <button onClick={() => deleteTracking(t.id)} className="flex-1 sm:flex-none text-red-400 hover:text-red-300 font-semibold text-xs bg-red-500/10 px-4 py-3 sm:py-2 rounded-lg border border-red-500/20 hover:border-red-500/50 transition-colors">Terminate</button>
                           </div>
                         </div>
 
