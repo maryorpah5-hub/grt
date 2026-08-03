@@ -94,36 +94,15 @@ export default function AdminDashboard() {
   };
 
   const autoGenerateRecord = async () => {
-    const statuses = ['In Transit', 'Pending', 'Out for Delivery', 'Customs Clearance', 'On Hold', 'Processing'];
-    const cities = ['New York, NY', 'Los Angeles, CA', 'Chicago, IL', 'Houston, TX', 'Miami, FL', 'Seattle, WA', 'London, UK', 'Tokyo, JP', 'Sydney, AU', 'Toronto, CA'];
-    
-    const randomCity = () => cities[Math.floor(Math.random() * cities.length)];
-    let origin = randomCity();
-    let destination = randomCity();
-    while (origin === destination) destination = randomCity();
-    
-    const status = statuses[Math.floor(Math.random() * statuses.length)];
-    const progress = Math.floor(Math.random() * 80) + 10;
-    
-    const etaDate = new Date();
-    etaDate.setDate(etaDate.getDate() + Math.floor(Math.random() * 10) + 1);
-    const eta = etaDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-
-    const data = {
-      trackingNumber: `SLD-US-${Math.floor(1000000 + Math.random() * 9000000)}`,
-      status,
-      origin,
-      destination,
-      eta,
-      progress
-    };
-
-    await fetch('/api/admin/tracking', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-      body: JSON.stringify(data)
-    });
-    fetchTracking();
+    try {
+      await fetch('/api/admin/tracking-generate', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      fetchTracking();
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   const saveTracking = async (e) => {
