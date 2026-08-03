@@ -93,6 +93,39 @@ export default function AdminDashboard() {
     setFormData({ trackingNumber: '', status: '', origin: '', destination: '', eta: '', progress: '' });
   };
 
+  const autoGenerateRecord = async () => {
+    const statuses = ['In Transit', 'Pending', 'Out for Delivery', 'Customs Clearance', 'On Hold', 'Processing'];
+    const cities = ['New York, NY', 'Los Angeles, CA', 'Chicago, IL', 'Houston, TX', 'Miami, FL', 'Seattle, WA', 'London, UK', 'Tokyo, JP', 'Sydney, AU', 'Toronto, CA'];
+    
+    const randomCity = () => cities[Math.floor(Math.random() * cities.length)];
+    let origin = randomCity();
+    let destination = randomCity();
+    while (origin === destination) destination = randomCity();
+    
+    const status = statuses[Math.floor(Math.random() * statuses.length)];
+    const progress = Math.floor(Math.random() * 80) + 10;
+    
+    const etaDate = new Date();
+    etaDate.setDate(etaDate.getDate() + Math.floor(Math.random() * 10) + 1);
+    const eta = etaDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+    const data = {
+      trackingNumber: `SLD-US-${Math.floor(1000000 + Math.random() * 9000000)}`,
+      status,
+      origin,
+      destination,
+      eta,
+      progress
+    };
+
+    await fetch('/api/admin/tracking', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify(data)
+    });
+    fetchTracking();
+  };
+
   const saveTracking = async (e) => {
     e.preventDefault();
     const data = { ...formData, progress: parseInt(formData.progress || '0', 10) };
@@ -202,22 +235,29 @@ export default function AdminDashboard() {
                   <h2 className="font-outfit font-bold text-xl md:text-2xl text-white">
                     {editingId ? 'Modify Secure Record' : 'Initialize Shipment'}
                   </h2>
-                  {editingId && (
-                    <button type="button" onClick={cancelEdit} className="text-gray-400 hover:text-white text-sm font-bold bg-white/5 px-4 py-2 rounded-xl transition-colors border border-white/10">
-                      Abort Modification
-                    </button>
-                  )}
+                  <div className="flex gap-3">
+                    {!editingId && (
+                      <button type="button" onClick={autoGenerateRecord} className="text-[#D4AF37] hover:text-[#FBBF24] text-sm font-bold bg-[#D4AF37]/10 hover:bg-[#D4AF37]/20 px-4 py-2 rounded-xl transition-colors border border-[#D4AF37]/30 shadow-lg shadow-orange-900/20">
+                        ⚡ Auto-Generate
+                      </button>
+                    )}
+                    {editingId && (
+                      <button type="button" onClick={cancelEdit} className="text-gray-400 hover:text-white text-sm font-bold bg-white/5 px-4 py-2 rounded-xl transition-colors border border-white/10">
+                        Abort Modification
+                      </button>
+                    )}
+                  </div>
                 </div>
                 
                 <form onSubmit={saveTracking} className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5 relative z-10">
                   {[
-                    {name: 'trackingNumber', placeholder: 'ID (e.g. SLD-123)'},
+                    {name: 'trackingNumber', placeholder: 'ID (Leave blank to auto-generate)'},
                     {name: 'status', placeholder: 'Current Status'},
                     {name: 'origin', placeholder: 'Origin Location'},
                     {name: 'destination', placeholder: 'Destination'},
                     {name: 'eta', placeholder: 'Est. Arrival'},
                   ].map(f => (
-                    <input key={f.name} name={f.name} value={formData[f.name]} onChange={handleInputChange} placeholder={f.placeholder} required className="bg-black/30 border border-white/10 focus:border-[#D4AF37] focus:bg-black/50 rounded-xl px-5 py-3.5 text-white outline-none transition-all duration-300 placeholder:text-gray-600 text-sm font-medium w-full" />
+                    <input key={f.name} name={f.name} value={formData[f.name]} onChange={handleInputChange} placeholder={f.placeholder} required={f.name !== 'trackingNumber'} disabled={f.name === 'trackingNumber' && !!editingId} className={`bg-black/30 border border-white/10 focus:border-[#D4AF37] focus:bg-black/50 rounded-xl px-5 py-3.5 text-white outline-none transition-all duration-300 placeholder:text-gray-600 text-sm font-medium w-full ${f.name === 'trackingNumber' && editingId ? 'opacity-50 cursor-not-allowed' : ''}`} />
                   ))}
                   <input name="progress" type="number" min="0" max="100" value={formData.progress} onChange={handleInputChange} placeholder="Completion % (0-100)" required className="bg-black/30 border border-white/10 focus:border-[#D4AF37] focus:bg-black/50 rounded-xl px-5 py-3.5 text-white outline-none transition-all duration-300 placeholder:text-gray-600 text-sm font-medium w-full" />
                   
