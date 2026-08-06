@@ -121,8 +121,13 @@ export default function TrackingResult() {
 
 /* ─── Result Body ─────────────────────────────────────────────────── */
 function ResultBody({ result }) {
+  const [showHistory, setShowHistory] = useState(false);
+  const [showStatuses, setShowStatuses] = useState(false);
+  const [showUpdates, setShowUpdates] = useState(false);
+
   const latestEvent = result.events?.[0] ?? null;
   const allEvents   = result.events ?? [];
+  const visibleEvents = showHistory ? allEvents : allEvents.slice(0, 3);
 
   // Simulate a realistic tracking timeline steps
   const BASE_STEPS = ['Preparing for Delivery', 'Out for Delivery', 'Delivered'];
@@ -150,17 +155,17 @@ function ResultBody({ result }) {
     <main className="max-w-3xl mx-auto px-4 sm:px-6 pb-20 pt-8">
       
       {/* Tracking Number Title */}
-      <h1 className="text-3xl font-bold text-[#336699] tracking-tight mb-8 break-all">
+      <h1 className="text-2xl sm:text-3xl font-bold text-[#336699] tracking-tight mb-6 sm:mb-8 break-all">
         {result.trackingNumber}
       </h1>
 
       {/* ── Latest Update Banner ── */}
-      <div className="mb-8 border-l-[12px] border-[#336699] bg-[#e8f4f8]">
-        <div className="p-6">
-          <h2 className="text-[#336699] font-bold text-2xl mb-4">Latest Update</h2>
+      <div className="mb-8 border-l-[8px] sm:border-l-[12px] border-[#336699] bg-[#e8f4f8]">
+        <div className="p-4 sm:p-6">
+          <h2 className="text-[#336699] font-bold text-xl sm:text-2xl mb-3 sm:mb-4">Latest Update</h2>
           {latestEvent ? (
             <>
-              <p className="text-[#333333] text-[16px] leading-relaxed mb-6">
+              <p className="text-[#333333] text-[15px] sm:text-[16px] leading-relaxed mb-5 sm:mb-6">
                 Your package is moving within the Secureline network and is on track to be delivered to its final destination. As of {formatDate(latestEvent.timestamp)}, it is currently <strong>{latestEvent.status.toLowerCase()}</strong> at <strong>{latestEvent.location}</strong>.
               </p>
               <div className="h-px bg-[#336699] mb-5" />
@@ -201,7 +206,7 @@ function ResultBody({ result }) {
         {allEvents.length > 0 && (
           <div className="relative border-l-[3px] border-[#336699] ml-3 pb-8">
             <div className="space-y-8">
-              {allEvents.map((ev, i) => {
+              {visibleEvents.map((ev, i) => {
                 const isLatest = i === 0;
                 return (
                   <div key={ev.id} className="relative pl-8">
@@ -238,28 +243,89 @@ function ResultBody({ result }) {
             </div>
 
             {/* Bottom link inside timeline line */}
-            <div className="relative pl-8 pt-8">
-               <div className="absolute -left-[7px] top-10 w-3 h-3 rounded-full bg-[#336699]" />
-               <button className="text-[#336699] font-bold text-sm hover:underline mt-2">
-                 See All Tracking History
-               </button>
-            </div>
+            {allEvents.length > 3 && !showHistory && (
+              <div className="relative pl-8 pt-8">
+                 <div className="absolute -left-[7px] top-10 w-3 h-3 rounded-full bg-[#336699]" />
+                 <button 
+                   onClick={() => setShowHistory(true)}
+                   className="text-[#336699] font-bold text-sm hover:underline mt-2"
+                 >
+                   See All Tracking History
+                 </button>
+              </div>
+            )}
+            {showHistory && (
+              <div className="relative pl-8 pt-8">
+                 <div className="absolute -left-[7px] top-10 w-3 h-3 rounded-full bg-[#336699]" />
+                 <button 
+                   onClick={() => setShowHistory(false)}
+                   className="text-[#336699] font-bold text-sm hover:underline mt-2"
+                 >
+                   Hide Tracking History
+                 </button>
+              </div>
+            )}
           </div>
         )}
       </div>
 
-      <div className="mt-12 pt-8 border-t border-gray-200 text-center">
-        <button className="text-[#336699] font-bold text-base hover:underline mb-8">
-          What Do Secureline Tracking Statuses Mean?
+      <div className="mt-12 pt-8 border-t border-gray-200 text-left sm:text-center">
+        <button 
+          onClick={() => setShowStatuses(!showStatuses)}
+          className="text-[#336699] font-bold text-base sm:text-lg hover:underline mb-6 flex items-center justify-between w-full sm:justify-center sm:gap-2"
+        >
+          <span>What Do Secureline Tracking Statuses Mean?</span>
+          <svg className={`w-5 h-5 transition-transform sm:hidden ${showStatuses ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
         </button>
+
+        {showStatuses && (
+          <div className="mb-10 text-left bg-gray-50 p-4 sm:p-6 rounded-lg border border-gray-200">
+            <h3 className="font-bold text-[#333333] mb-3">Common Statuses:</h3>
+            <ul className="space-y-3 text-sm text-gray-700">
+              <li><strong>Pending:</strong> Your shipment has been created but not yet handed over to us.</li>
+              <li><strong>In Transit:</strong> Your package is on the move within our logistics network.</li>
+              <li><strong>Out for Delivery:</strong> The package has reached the final local facility and is loaded onto a delivery vehicle.</li>
+              <li><strong>Delivered:</strong> The package was successfully handed over to the recipient or left at the destination.</li>
+            </ul>
+          </div>
+        )}
         
-        <div className="border-t border-gray-300 flex justify-between items-center py-6 px-4">
-          <span className="text-[#336699] font-bold text-xl">Text & Email Updates</span>
-          <svg className="w-6 h-6 text-[#336699]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div 
+          onClick={() => setShowUpdates(!showUpdates)}
+          className="border-t border-gray-300 flex justify-between items-center py-5 sm:py-6 px-2 sm:px-4 cursor-pointer hover:bg-gray-50 transition-colors"
+        >
+          <span className="text-[#336699] font-bold text-lg sm:text-xl">Text & Email Updates</span>
+          <svg className={`w-6 h-6 text-[#336699] transition-transform ${showUpdates ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
         </div>
-        <div className="border-t border-gray-300" />
+        
+        {showUpdates && (
+          <div className="text-left bg-white p-4 sm:p-6 border-b border-x border-gray-300 mb-6">
+            <p className="text-sm text-gray-600 mb-4">Sign up to receive automatic tracking updates via text or email.</p>
+            <form className="space-y-4 max-w-md mx-auto sm:mx-0" onSubmit={e => e.preventDefault()}>
+              <div>
+                <label className="block text-xs font-bold text-gray-700 mb-1">Email Address</label>
+                <input type="email" placeholder="Enter email" className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:border-[#336699] focus:outline-none" />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-gray-700 mb-1">Mobile Phone (Optional)</label>
+                <input type="tel" placeholder="(555) 555-5555" className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:border-[#336699] focus:outline-none" />
+              </div>
+              <div className="pt-2">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" className="w-4 h-4 text-[#336699]" defaultChecked />
+                  <span className="text-sm text-gray-700 font-medium">All Activity Updates</span>
+                </label>
+              </div>
+              <button className="w-full sm:w-auto bg-[#336699] hover:bg-[#2b5c92] text-white px-6 py-2 rounded font-bold text-sm transition-colors mt-2">
+                Subscribe
+              </button>
+            </form>
+          </div>
+        )}
+
+        {!showUpdates && <div className="border-t border-gray-300" />}
       </div>
 
     </main>
