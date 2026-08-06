@@ -3,28 +3,14 @@ import { useNavigate } from 'react-router-dom'
 import bgImage from '../assets/images/cargos1.jpg'
 
 export default function TrackSection() {
-  const [tracking, setTracking] = useState('')
-  const [loading, setLoading]   = useState(false)
-  const [error, setError]       = useState(null)
-  const navigate = useNavigate()
+  const [tracking, setTracking] = useState('');
+  const navigate = useNavigate();
 
-  const handleTrack = async () => {
-    const trimmed = tracking.trim()
-    if (!trimmed) return
-    setLoading(true)
-    setError(null)
-    try {
-      const res = await fetch(`/api/tracking/${encodeURIComponent(trimmed)}`)
-      if (res.ok) {
-        navigate(`/track/${encodeURIComponent(trimmed)}`)
-      } else {
-        setError('Tracking number not found. Please check and try again.')
-      }
-    } catch {
-      setError('Network error. Please check your connection and try again.')
-    }
-    setLoading(false)
-  }
+  const handleTrack = () => {
+    const trimmed = tracking.trim();
+    if (!trimmed) return;
+    navigate(`/track/${encodeURIComponent(trimmed)}`);
+  };
 
   return (
     <section id="track" className="relative py-24 overflow-hidden">
@@ -84,29 +70,19 @@ export default function TrackSection() {
                 />
                 <button
                   onClick={handleTrack}
-                  disabled={loading}
-                  className="bg-[#D4AF37] hover:bg-[#FBBF24] disabled:opacity-60 text-white px-5 py-3 rounded-xl font-semibold transition-all duration-200 whitespace-nowrap"
+                  className="bg-[#D4AF37] hover:bg-[#FBBF24] text-white px-5 py-3 rounded-xl font-semibold transition-all duration-200 whitespace-nowrap"
                 >
-                  {loading ? '...' : 'Track Now'}
+                  Track Now
                 </button>
               </div>
               <p className="text-[#9ca3af] text-xs mb-4">Formats: SLD-US-7742193 · SLUS884219 · SLD-2025-00142</p>
 
-              {error && (
-                <div className="p-4 rounded-xl bg-red-50 border border-red-100 flex items-start gap-3 animate-[fadeIn_0.3s_ease]">
-                  <span className="w-5 h-5 rounded-full bg-red-100 text-red-600 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">!</span>
-                  <p className="text-red-700 text-sm font-medium">{error}</p>
-                </div>
-              )}
-
-              {!error && (
-                <div className="flex items-center gap-3 mt-2 p-3 rounded-xl bg-[#3B4B96]/5 border border-[#3B4B96]/10">
-                  <div className="w-8 h-8 rounded-full bg-[#3B4B96]/10 flex items-center justify-center text-[#3B4B96] text-lg shrink-0">🔍</div>
-                  <p className="text-[#6b7280] text-xs leading-relaxed">
-                    Enter your consignment number above and press <span className="font-semibold text-[#0d1629]">Track Now</span> to get a full real-time status update.
-                  </p>
-                </div>
-              )}
+              <div className="flex items-center gap-3 mt-2 p-3 rounded-xl bg-[#3B4B96]/5 border border-[#3B4B96]/10">
+                <div className="w-8 h-8 rounded-full bg-[#3B4B96]/10 flex items-center justify-center text-[#3B4B96] text-lg shrink-0">🔍</div>
+                <p className="text-[#6b7280] text-xs leading-relaxed">
+                  Enter your consignment number above and press <span className="font-semibold text-[#0d1629]">Track Now</span> to get a full real-time status update.
+                </p>
+              </div>
             </div>
           </div>
 

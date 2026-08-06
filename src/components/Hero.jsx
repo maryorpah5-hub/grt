@@ -5,29 +5,13 @@ import flightBg from '../assets/images/flight2.jpg';
 
 export default function Hero() {
   const [tracking, setTracking] = useState('');
-  const [loading, setLoading]   = useState(false);
-  const [error, setError]       = useState(null);
   const navigate = useNavigate();
 
-  const handleTrack = async (e) => {
+  const handleTrack = (e) => {
     e?.preventDefault();
     const trimmed = tracking.trim();
     if (!trimmed) return;
-
-    setLoading(true);
-    setError(null);
-
-    try {
-      const res = await fetch(`/api/tracking/${encodeURIComponent(trimmed)}`);
-      if (res.ok) {
-        navigate(`/track/${encodeURIComponent(trimmed)}`);
-      } else {
-        setError('Tracking number not found. Please check and try again.');
-      }
-    } catch {
-      setError('Network error. Please check your connection and try again.');
-    }
-    setLoading(false);
+    navigate(`/track/${encodeURIComponent(trimmed)}`);
   };
 
   return (
@@ -76,25 +60,15 @@ export default function Hero() {
               />
               <button
                 type="submit"
-                disabled={loading}
-                className="bg-[#3B4B96] hover:bg-[#2c3977] disabled:opacity-60 text-white px-8 py-4 font-semibold transition-colors duration-200 whitespace-nowrap text-sm tracking-wide"
+                className="bg-[#3B4B96] hover:bg-[#2c3977] text-white px-8 py-4 font-semibold transition-colors duration-200 whitespace-nowrap text-sm tracking-wide"
               >
-                {loading ? 'CHECKING...' : 'TRACK RESULT'}
+                TRACK RESULT
               </button>
             </form>
 
-            {!error && (
-              <p className="text-[#333333] font-medium text-[15px]">
-                Ex: SLD-US-7742193
-              </p>
-            )}
-
-            {error && (
-              <div className="mt-2 p-4 rounded-xl bg-red-50 border border-red-100 flex items-start gap-3 animate-[fadeIn_0.3s_ease]">
-                <span className="w-5 h-5 rounded-full bg-red-100 text-red-600 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">!</span>
-                <p className="text-red-700 text-sm font-medium">{error}</p>
-              </div>
-            )}
+            <p className="text-[#333333] font-medium text-[15px]">
+              Ex: SLD-US-7742193
+            </p>
           </div>
 
         </div>
