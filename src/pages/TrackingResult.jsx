@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
+import logo from '../assets/logo.png';
 
 /* ─── Status meta ─────────────────────────────────────────────────── */
 const STATUS_META = {
@@ -30,10 +31,8 @@ function TopBar({ input, setInput, handleSearch }) {
     <header className="sticky top-0 z-50 bg-[#060d1a]/95 backdrop-blur-xl border-b border-white/10 shadow-2xl">
       <div className="max-w-2xl mx-auto px-4 h-14 flex items-center gap-3">
         {/* Brand mark */}
-        <Link to="/" className="shrink-0">
-          <div className="w-8 h-8 bg-gradient-to-tr from-[#3B4B96] to-[#4F62B8] rounded-lg flex items-center justify-center text-white font-bold text-sm ring-1 ring-white/20">
-            S
-          </div>
+        <Link to="/" className="shrink-0 flex items-center">
+          <img src={logo} alt="Secureline" className="w-8 h-8 object-contain bg-white/90 p-1 rounded-md shadow-sm" />
         </Link>
 
         {/* Search form — fills remaining space */}
