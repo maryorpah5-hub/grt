@@ -2,25 +2,12 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import logo from '../assets/logo.png';
 
-/* ─── Status meta ─────────────────────────────────────────────────── */
-const STATUS_META = {
-  'Delivered':         { color: '#22c55e', bg: '#052e16', label: 'Delivered',         icon: '✓' },
-  'Out for Delivery':  { color: '#f97316', bg: '#431407', label: 'Out for Delivery',   icon: '🚚' },
-  'In Transit':        { color: '#93c5fd', bg: '#1e3a5f', label: 'In Transit',         icon: '✈' },
-  'On Hold':           { color: '#D4AF37', bg: '#3a2f0b', label: 'On Hold',            icon: '⏸' },
-  'Pending':           { color: '#9ca3af', bg: '#1f2937', label: 'Pending',            icon: '⏳' },
-  'Customs Clearance': { color: '#c4b5fd', bg: '#2e1065', label: 'Customs Clearance',  icon: '🛃' },
-  'Returned':          { color: '#fca5a5', bg: '#450a0a', label: 'Returned',           icon: '↩' },
-};
-const getStatusMeta = (s) =>
-  STATUS_META[s] ?? { color: '#93c5fd', bg: '#1e3a5f', label: s, icon: '📦' };
-
 /* ─── Spinner ─────────────────────────────────────────────────────── */
 function Spinner() {
   return (
-    <div className="min-h-screen bg-[#060d1a] flex flex-col items-center justify-center gap-5 px-6">
-      <div className="w-14 h-14 rounded-full border-4 border-[#3B4B96] border-t-[#D4AF37] animate-spin" />
-      <p className="text-white/50 font-medium text-sm tracking-wide text-center">Locating your shipment…</p>
+    <div className="min-h-screen bg-white flex flex-col items-center justify-center gap-5 px-6">
+      <div className="w-14 h-14 rounded-full border-4 border-[#336699] border-t-transparent animate-spin" />
+      <p className="text-[#333333] font-medium text-sm tracking-wide text-center">Locating your shipment…</p>
     </div>
   );
 }
@@ -28,30 +15,33 @@ function Spinner() {
 /* ─── Sticky TopBar ────────────────────────────────────────────────── */
 function TopBar({ input, setInput, handleSearch }) {
   return (
-    <header className="sticky top-0 z-50 bg-[#060d1a]/95 backdrop-blur-xl border-b border-white/10 shadow-2xl">
-      <div className="max-w-2xl mx-auto px-4 h-14 flex items-center gap-3">
+    <header className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
+      <div className="max-w-3xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
         {/* Brand mark */}
-        <Link to="/" className="shrink-0 flex items-center">
-          <img src={logo} alt="Secureline" className="w-8 h-8 object-contain bg-white/90 p-1 rounded-md shadow-sm" />
+        <Link to="/" className="shrink-0 flex items-center gap-2">
+          <img src={logo} alt="Secureline" className="w-10 h-10 object-contain" />
+          <span className="font-outfit text-[#336699] font-bold hidden sm:inline text-xl tracking-tight">
+            Secureline<span className="text-[#D4AF37]">Delivery</span>
+          </span>
         </Link>
 
-        {/* Search form — fills remaining space */}
-        <form onSubmit={handleSearch} className="flex-1 flex items-center gap-2 min-w-0">
-          <div className="flex-1 flex items-center bg-white/[0.07] border border-white/10 focus-within:border-[#D4AF37]/60 rounded-xl px-3 py-2 transition-all min-w-0">
-            <svg className="w-4 h-4 text-white/30 mr-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        {/* Search form */}
+        <form onSubmit={handleSearch} className="flex-1 max-w-sm flex items-center gap-2 min-w-0">
+          <div className="flex-1 flex items-center bg-gray-100 border border-gray-300 focus-within:border-[#336699] rounded-md px-3 py-2 transition-all min-w-0">
+            <svg className="w-4 h-4 text-gray-500 mr-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
             <input
               type="text"
               value={input}
               onChange={e => setInput(e.target.value)}
-              placeholder="Enter tracking number…"
-              className="flex-1 bg-transparent outline-none text-white placeholder:text-white/25 text-sm font-medium min-w-0"
+              placeholder="Search or enter tracking number"
+              className="flex-1 bg-transparent outline-none text-[#333333] placeholder:text-gray-500 text-sm font-medium min-w-0"
             />
           </div>
           <button
             type="submit"
-            className="shrink-0 bg-[#D4AF37] hover:bg-[#FBBF24] text-[#060d1a] px-3.5 py-2 rounded-xl font-bold text-sm transition-colors"
+            className="shrink-0 bg-[#336699] hover:bg-[#2b5c92] text-white px-4 py-2 rounded-md font-bold text-sm transition-colors"
           >
             Track
           </button>
@@ -65,15 +55,15 @@ function TopBar({ input, setInput, handleSearch }) {
 function NotFound({ trackingNumber, onRetry }) {
   return (
     <div className="min-h-[70vh] flex flex-col items-center justify-center px-6 text-center">
-      <div className="w-20 h-20 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center text-4xl mb-6">🔍</div>
-      <h2 className="font-outfit text-2xl font-bold text-white mb-2">No Result Found</h2>
-      <p className="text-white/50 mb-2 max-w-xs text-sm leading-relaxed">
+      <div className="w-20 h-20 rounded-full bg-red-100 border border-red-200 flex items-center justify-center text-4xl mb-6 text-red-500">!</div>
+      <h2 className="font-sans text-2xl font-bold text-[#333333] mb-2">Tracking Number Not Found</h2>
+      <p className="text-gray-600 mb-2 max-w-xs text-sm leading-relaxed">
         We couldn't find a shipment for:
       </p>
-      <span className="font-mono text-[#D4AF37] font-bold text-base mb-8 break-all px-4 text-center">{trackingNumber}</span>
+      <span className="font-mono text-[#336699] font-bold text-base mb-8 break-all px-4 text-center">{trackingNumber}</span>
       <button
         onClick={onRetry}
-        className="bg-[#3B4B96] hover:bg-[#4F62B8] text-white px-8 py-3.5 rounded-xl font-semibold transition-colors text-sm"
+        className="bg-[#336699] hover:bg-[#2b5c92] text-white px-8 py-3.5 rounded-md font-semibold transition-colors text-sm"
       >
         Try Another Number
       </button>
@@ -114,14 +104,10 @@ export default function TrackingResult() {
     navigate(`/track/${encodeURIComponent(t)}`);
   };
 
-  if (loading) return <div className="min-h-screen bg-[#060d1a]"><Spinner /></div>;
+  if (loading) return <Spinner />;
 
   return (
-    <div className="min-h-screen bg-[#060d1a] font-inter text-white">
-      {/* Ambient glows — hidden on mobile for performance */}
-      <div className="pointer-events-none hidden sm:block fixed top-0 right-0 w-[500px] h-[500px] bg-[#3B4B96]/8 rounded-full blur-[140px]" />
-      <div className="pointer-events-none hidden sm:block fixed bottom-0 left-0 w-[400px] h-[400px] bg-[#D4AF37]/5 rounded-full blur-[120px]" />
-
+    <div className="min-h-screen bg-white font-sans text-[#333333]">
       <TopBar input={input} setInput={setInput} handleSearch={handleSearch} />
 
       {notFound ? (
@@ -133,201 +119,149 @@ export default function TrackingResult() {
   );
 }
 
-/* ─── Result Body (extracted for clarity) ─────────────────────────── */
+/* ─── Result Body ─────────────────────────────────────────────────── */
 function ResultBody({ result }) {
-  const meta        = getStatusMeta(result.status);
   const latestEvent = result.events?.[0] ?? null;
   const allEvents   = result.events ?? [];
 
-  /* Simple 4-step pipeline */
-  const STEPS = ['Pending', 'In Transit', 'Out for Delivery', 'Delivered'];
-  const stepIdx = Math.max(0, STEPS.findIndex(s => s === result.status));
+  // Simulate a realistic tracking timeline steps
+  const BASE_STEPS = ['Preparing for Delivery', 'Out for Delivery', 'Delivered'];
+  
+  // Format date nicely for USPS style
+  const formatDate = (isoString) => {
+    const d = new Date(isoString);
+    const month = d.toLocaleString('en-US', { month: 'long' });
+    const day = d.getDate();
+    const year = d.getFullYear();
+    const time = d.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+    return `${month} ${day}, ${year} at ${time}`;
+  };
+
+  const formatShortDate = (isoString) => {
+    const d = new Date(isoString);
+    const month = d.toLocaleString('en-US', { month: 'long' });
+    const day = d.getDate();
+    const year = d.getFullYear();
+    const time = d.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+    return `${month} ${day}, ${year} ${time}`;
+  };
 
   return (
-    <main className="relative z-10 max-w-2xl mx-auto px-4 pb-20 pt-6">
-
-      {/* ── Tracking number + status ── */}
-      <div className="mb-5">
-        <p className="text-white/40 text-[10px] uppercase tracking-widest font-semibold mb-1.5">Tracking Number</p>
-        <div className="flex flex-wrap items-start gap-3">
-          <h1 className="font-outfit text-xl sm:text-2xl font-bold text-white tracking-tight break-all flex-1 min-w-0">
-            {result.trackingNumber}
-          </h1>
-          <span
-            className="shrink-0 text-xs font-bold px-3 py-1.5 rounded-full border"
-            style={{ color: meta.color, backgroundColor: meta.bg, borderColor: meta.color + '55' }}
-          >
-            {meta.icon} {meta.label}
-          </span>
-        </div>
-      </div>
+    <main className="max-w-3xl mx-auto px-4 sm:px-6 pb-20 pt-8">
+      
+      {/* Tracking Number Title */}
+      <h1 className="text-3xl font-bold text-[#336699] tracking-tight mb-8 break-all">
+        {result.trackingNumber}
+      </h1>
 
       {/* ── Latest Update Banner ── */}
-      <div className="rounded-2xl overflow-hidden mb-4 border border-[#3B4B96]/30 bg-[#0d1629] shadow-xl">
-        <div className="flex items-stretch">
-          <div className="w-1 shrink-0 bg-gradient-to-b from-[#D4AF37] to-[#3B4B96]" />
-          <div className="p-4 sm:p-5 flex-1 min-w-0">
-            <p className="text-[#D4AF37] font-outfit font-bold text-xs uppercase tracking-widest mb-2.5">Latest Update</p>
-            {latestEvent ? (
-              <>
-                <p className="text-white/85 text-[14px] leading-relaxed mb-3">
-                  Your shipment is <span className="text-white font-semibold">{latestEvent.status}</span> at{' '}
-                  <span className="text-white font-semibold">{latestEvent.location}</span>.{' '}
-                  {result.status !== 'Delivered'
-                    ? `Estimated delivery: ${result.eta}.`
-                    : 'Your package has been successfully delivered.'}
-                </p>
-                <div className="h-px bg-white/10 mb-3" />
-                <p className="text-white/35 text-[12px]">
-                  Last scanned:&nbsp;
-                  <span className="text-white/60">
-                    {new Date(latestEvent.timestamp).toLocaleString(undefined, {
-                      month: 'short', day: 'numeric', year: 'numeric',
-                      hour: 'numeric', minute: '2-digit'
-                    })}
-                  </span>
-                </p>
-              </>
-            ) : (
-              <p className="text-white/60 text-[14px] leading-relaxed">
-                Shipment registered. Tracking events will appear once the package is scanned.
-                {result.eta && ` Estimated delivery: ${result.eta}.`}
+      <div className="mb-8 border-l-[12px] border-[#336699] bg-[#e8f4f8]">
+        <div className="p-6">
+          <h2 className="text-[#336699] font-bold text-2xl mb-4">Latest Update</h2>
+          {latestEvent ? (
+            <>
+              <p className="text-[#333333] text-[16px] leading-relaxed mb-6">
+                Your package is moving within the Secureline network and is on track to be delivered to its final destination. As of {formatDate(latestEvent.timestamp)}, it is currently <strong>{latestEvent.status.toLowerCase()}</strong> at <strong>{latestEvent.location}</strong>.
               </p>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* ── Origin / Destination / ETA ── */}
-      <div className="grid grid-cols-3 gap-2 mb-4">
-        {[
-          { label: 'Origin',       value: result.origin,      icon: '📍' },
-          { label: 'Destination',  value: result.destination,  icon: '🎯' },
-          { label: 'Est. Arrival', value: result.eta,          icon: '📅' },
-        ].map(c => (
-          <div key={c.label} className="bg-white/[0.04] border border-white/10 rounded-xl p-3 flex flex-col gap-1 min-w-0">
-            <span className="text-[9px] uppercase tracking-widest text-white/35 font-semibold">{c.label}</span>
-            <span className="text-white font-semibold text-[11px] sm:text-xs leading-tight break-words">{c.icon} {c.value ?? '—'}</span>
-          </div>
-        ))}
-      </div>
-
-      {/* ── Progress ── */}
-      <div className="bg-white/[0.04] border border-white/10 rounded-2xl p-4 sm:p-5 mb-4">
-        {/* Label + percentage */}
-        <div className="flex justify-between items-center mb-3">
-          <p className="text-white/60 text-sm font-semibold">Delivery Progress</p>
-          <span className="font-outfit font-bold text-[#D4AF37] text-base">{result.progress}%</span>
-        </div>
-
-        {/* Progress bar */}
-        <div className="h-3 bg-black/50 rounded-full overflow-hidden border border-white/5 mb-4 relative">
-          <div
-            className="h-full bg-gradient-to-r from-[#3B4B96] to-[#D4AF37] rounded-full transition-all duration-1000 relative"
-            style={{ width: `${result.progress}%` }}
-          >
-            {result.progress > 5 && (
-              <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3.5 h-3.5 rounded-full bg-[#D4AF37] shadow-[0_0_8px_rgba(212,175,55,0.9)]" />
-            )}
-          </div>
-        </div>
-
-        {/* Step pills — mobile-friendly horizontal scroll if needed */}
-        <div className="flex items-center gap-1 overflow-x-auto pb-1 scrollbar-none">
-          {STEPS.map((s, i) => {
-            const done = i <= stepIdx;
-            return (
-              <div key={s} className="flex items-center gap-1 shrink-0">
-                <div className="flex flex-col items-center gap-1">
-                  <div
-                    className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold border-2 transition-all ${
-                      done
-                        ? 'bg-[#D4AF37] border-[#D4AF37] text-[#060d1a]'
-                        : 'bg-transparent border-white/15 text-white/25'
-                    }`}
-                  >
-                    {done ? '✓' : i + 1}
-                  </div>
-                  <span className={`text-[9px] font-semibold text-center max-w-[52px] leading-tight ${done ? 'text-[#D4AF37]' : 'text-white/20'}`}>
-                    {s}
-                  </span>
-                </div>
-                {i < STEPS.length - 1 && (
-                  <div className={`w-6 sm:w-10 h-px mb-4 ${i < stepIdx ? 'bg-[#D4AF37]' : 'bg-white/10'}`} />
-                )}
+              <div className="h-px bg-[#336699] mb-5" />
+              <p className="text-[#336699] font-bold text-base mb-1">
+                Get More Out of Secureline Tracking:
+              </p>
+              <div className="flex items-center gap-2 text-[#336699]">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <span className="font-bold cursor-pointer hover:underline">Secureline Tracking Plus®</span>
               </div>
-            );
-          })}
+            </>
+          ) : (
+            <p className="text-[#333333] text-[16px] leading-relaxed">
+              Your shipment has been registered in the Secureline network. Tracking events will appear once the package receives its first scan.
+              {result.eta && ` Estimated delivery: ${result.eta}.`}
+            </p>
+          )}
         </div>
       </div>
 
       {/* ── Timeline ── */}
-      <div className="bg-white/[0.04] border border-white/10 rounded-2xl p-4 sm:p-5">
-        <h2 className="font-outfit font-bold text-base sm:text-lg text-white mb-5">Tracking History</h2>
-
-        {allEvents.length === 0 ? (
-          <div className="text-center py-10">
-            <div className="text-4xl mb-3">📦</div>
-            <p className="text-white/40 text-sm">No tracking events yet. Check back soon.</p>
+      <div className="pl-2 sm:pl-6 max-w-2xl">
+        {/* Future steps (gray) */}
+        {result.status !== 'Delivered' && (
+          <div className="relative border-l-[3px] border-[#d1d5db] ml-3 pb-8 space-y-8">
+            {BASE_STEPS.map((step, idx) => (
+              <div key={idx} className="relative pl-8">
+                <div className="absolute -left-[5.5px] top-1.5 w-2 h-2 rounded-full bg-[#9ca3af]" />
+                <div className="font-bold text-[#9ca3af] text-base">{step}</div>
+              </div>
+            ))}
           </div>
-        ) : (
-          <div className="relative">
-            {/* Vertical connector line */}
-            <div className="absolute left-[11px] top-3 bottom-3 w-0.5 bg-gradient-to-b from-[#D4AF37] via-[#3B4B96]/50 to-white/5" />
+        )}
 
-            <div className="space-y-5">
+        {/* Current & Past Events */}
+        {allEvents.length > 0 && (
+          <div className="relative border-l-[3px] border-[#336699] ml-3 pb-8">
+            <div className="space-y-8">
               {allEvents.map((ev, i) => {
                 const isLatest = i === 0;
                 return (
-                  <div key={ev.id} className="flex gap-4 relative">
+                  <div key={ev.id} className="relative pl-8">
                     {/* Dot */}
-                    <div className="shrink-0 mt-0.5" style={{ width: 24 }}>
-                      <div
-                        className={`w-6 h-6 rounded-full border-[3px] flex items-center justify-center text-[9px] font-bold z-10 relative ${
-                          isLatest
-                            ? 'border-[#D4AF37] bg-[#D4AF37] text-[#060d1a] shadow-[0_0_10px_rgba(212,175,55,0.6)]'
-                            : 'border-[#3B4B96] bg-[#0d1629] text-white/40'
-                        }`}
-                      >
-                        {isLatest ? '●' : '○'}
-                      </div>
-                    </div>
+                    {isLatest ? (
+                      <div className="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-[#336699]" />
+                    ) : (
+                      <div className="absolute -left-[7px] top-1.5 w-3 h-3 rounded-full bg-[#336699]" />
+                    )}
 
                     {/* Content */}
-                    <div className={`flex-1 min-w-0 pb-1 ${isLatest ? '' : 'opacity-70'}`}>
-                      <div className="flex flex-wrap items-center gap-2 mb-0.5">
-                        <span className={`font-bold text-sm ${isLatest ? 'text-white' : 'text-white/70'}`}>
-                          {ev.status}
-                        </span>
-                        {isLatest && (
-                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#D4AF37]/15 text-[#D4AF37] border border-[#D4AF37]/30">
-                            Latest
-                          </span>
-                        )}
+                    <div className="pb-1">
+                      {isLatest && (
+                        <div className="font-bold text-xl text-[#336699] mb-1">On the Way</div>
+                      )}
+                      
+                      <div className={`font-bold ${isLatest ? 'text-[#333333] text-base' : 'text-[#336699] text-base mb-1'}`}>
+                        {ev.status}
                       </div>
-                      <p className="text-white/55 text-[13px] font-medium mb-1 truncate">{ev.location}</p>
-                      <p className="text-white/25 text-[11px] font-semibold uppercase tracking-wide">
-                        {new Date(ev.timestamp).toLocaleString(undefined, {
-                          weekday: 'short', month: 'short', day: 'numeric',
-                          year: 'numeric', hour: 'numeric', minute: '2-digit'
-                        })}
+                      
+                      {ev.location && (
+                        <p className={`text-[#6b7280] text-sm uppercase ${isLatest ? 'mt-0' : 'mb-0'}`}>
+                          {ev.location}
+                        </p>
+                      )}
+                      
+                      <p className="text-[#6b7280] text-[15px] mt-0.5">
+                        {formatShortDate(ev.timestamp)}
                       </p>
                     </div>
                   </div>
                 );
               })}
             </div>
+
+            {/* Bottom link inside timeline line */}
+            <div className="relative pl-8 pt-8">
+               <div className="absolute -left-[7px] top-10 w-3 h-3 rounded-full bg-[#336699]" />
+               <button className="text-[#336699] font-bold text-sm hover:underline mt-2">
+                 See All Tracking History
+               </button>
+            </div>
           </div>
         )}
       </div>
 
-      {/* ── Footer note ── */}
-      <p className="text-center text-white/20 text-[11px] mt-8 leading-relaxed px-2">
-        SecureLine Delivery — All shipment data is encrypted and secured.{' '}
-        <a href="/#contact" className="text-[#D4AF37]/50 hover:text-[#D4AF37] transition-colors">
-          Contact support
-        </a>
-      </p>
+      <div className="mt-12 pt-8 border-t border-gray-200 text-center">
+        <button className="text-[#336699] font-bold text-base hover:underline mb-8">
+          What Do Secureline Tracking Statuses Mean?
+        </button>
+        
+        <div className="border-t border-gray-300 flex justify-between items-center py-6 px-4">
+          <span className="text-[#336699] font-bold text-xl">Text & Email Updates</span>
+          <svg className="w-6 h-6 text-[#336699]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
+        <div className="border-t border-gray-300" />
+      </div>
+
     </main>
   );
 }
