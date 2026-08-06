@@ -124,6 +124,7 @@ function ResultBody({ result }) {
   const [showHistory, setShowHistory] = useState(false);
   const [showStatuses, setShowStatuses] = useState(false);
   const [showUpdates, setShowUpdates] = useState(false);
+  const [subscribed, setSubscribed] = useState(false);
 
   const latestEvent = result.events?.[0] ?? null;
   const allEvents   = result.events ?? [];
@@ -302,26 +303,38 @@ function ResultBody({ result }) {
         
         {showUpdates && (
           <div className="text-left bg-white p-4 sm:p-6 border-b border-x border-gray-300 mb-6">
-            <p className="text-sm text-gray-600 mb-4">Sign up to receive automatic tracking updates via text or email.</p>
-            <form className="space-y-4 max-w-md mx-auto sm:mx-0" onSubmit={e => e.preventDefault()}>
-              <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1">Email Address</label>
-                <input type="email" placeholder="Enter email" className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:border-[#336699] focus:outline-none" />
+            {subscribed ? (
+              <div className="bg-green-50 border border-green-200 text-green-800 rounded-lg p-5 flex flex-col items-center justify-center text-center">
+                <svg className="w-12 h-12 text-green-500 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <h4 className="font-bold text-lg mb-1">Successfully Subscribed!</h4>
+                <p className="text-sm text-green-700">You will now receive automatic updates for this shipment.</p>
               </div>
-              <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1">Mobile Phone (Optional)</label>
-                <input type="tel" placeholder="(555) 555-5555" className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:border-[#336699] focus:outline-none" />
-              </div>
-              <div className="pt-2">
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input type="checkbox" className="w-4 h-4 text-[#336699]" defaultChecked />
-                  <span className="text-sm text-gray-700 font-medium">All Activity Updates</span>
-                </label>
-              </div>
-              <button className="w-full sm:w-auto bg-[#336699] hover:bg-[#2b5c92] text-white px-6 py-2 rounded font-bold text-sm transition-colors mt-2">
-                Subscribe
-              </button>
-            </form>
+            ) : (
+              <>
+                <p className="text-sm text-gray-600 mb-4">Sign up to receive automatic tracking updates via text or email.</p>
+                <form className="space-y-4 max-w-md mx-auto sm:mx-0" onSubmit={e => { e.preventDefault(); setSubscribed(true); }}>
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 mb-1">Email Address</label>
+                    <input type="email" placeholder="Enter email" required className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:border-[#336699] focus:outline-none" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 mb-1">Mobile Phone (Optional)</label>
+                    <input type="tel" placeholder="(555) 555-5555" className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:border-[#336699] focus:outline-none" />
+                  </div>
+                  <div className="pt-2">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input type="checkbox" className="w-4 h-4 text-[#336699]" defaultChecked />
+                      <span className="text-sm text-gray-700 font-medium">All Activity Updates</span>
+                    </label>
+                  </div>
+                  <button type="submit" className="w-full sm:w-auto bg-[#336699] hover:bg-[#2b5c92] text-white px-6 py-2 rounded font-bold text-sm transition-colors mt-2">
+                    Subscribe
+                  </button>
+                </form>
+              </>
+            )}
           </div>
         )}
 
