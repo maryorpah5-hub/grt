@@ -131,7 +131,7 @@ function ResultBody({ result }) {
   const visibleEvents = showHistory ? allEvents : allEvents.slice(0, 3);
 
   // Simulate a realistic tracking timeline steps
-  const BASE_STEPS = ['Preparing for Delivery', 'Out for Delivery', 'Delivered'];
+  const BASE_STEPS = ['Delivered', 'Out for Delivery', 'Preparing for Delivery'];
   
   // Format date nicely for USPS style
   const formatDate = (isoString) => {
